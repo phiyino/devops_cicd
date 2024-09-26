@@ -1,0 +1,42 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+     
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '15.5.1'  # Use the node version your project requires
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run ESLint (Linter)
+      - name: Run ESLint
+        run: npm run lint
+
+      # Run Prettier (Formatter)
+      - name: run prettier (auto-fix)
+        run: npm prettier --write .
+
+      # Run tests with Jest
+      - name: Run Jest Tests
+        run: CI=true npm run test
+
+      # Build the application
+      - name: Build application
+        run: npm run build
